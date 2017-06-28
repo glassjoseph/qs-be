@@ -1,0 +1,30 @@
+{
+  "name": "1701_quantified_self_backend",
+  "version": "1.0.0",
+  "description": "A backend database for a frontend calorie counter",
+  "main": "server.js",
+  "scripts": {
+    "test": "mocha test/*test.js",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/valerietrudell/1701_quantified_self_backend.git"
+  },
+  "author": "Valerie Trudell and Joseph Glass",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/valerietrudell/1701_quantified_self_backend/issues"
+  },
+  "homepage": "https://github.com/valerietrudell/1701_quantified_self_backend#readme",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "md5": "^2.2.1"
+  },
+  "devDependencies": {
+    "chai": "^4.0.2",
+    "mocha": "^3.4.2",
+    "request": "^2.81.0"
+  }
+}
