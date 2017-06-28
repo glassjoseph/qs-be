@@ -1,7 +1,6 @@
-const express          = require('express')
-const app              = express()
-const bodyParser       = require('bodyParser')
-const md5              = require('md5')
+const express = require('express')
+const app  = express()
+
 
 app.set('port', process.env.PORT || 3000)
 app.locals.title = "Quantified Self BE"
