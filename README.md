@@ -1,4 +1,4 @@
-# Quanified Self  
+# Quantified Self  
 
 ## Resources
   backend.turing.io/module4/lessons/building_and_testing_with_express
