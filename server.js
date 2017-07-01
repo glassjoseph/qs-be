@@ -2,9 +2,11 @@ const express           = require('express')
 const app               = express()
 const bodyParser        = require('body-parser')
 const foodsController   = require('./lib/controllers/api/v1/foodsController')
+const mealsController = require('./lib/controllers/api/v1/mealsController')
 const cors              = require('cors')
 const pry               = require('pryjs')
-const FoodsController    = new foodsController()
+const FoodsController   = new foodsController()
+const MealsController   = new mealsController()
 
 app.use(cors({origin: "*"}))
 app.use(bodyParser.json())
@@ -38,10 +40,18 @@ if(!module.parent){
 
 //NEW
 
-
 app.get('/api/v1/foods', (request, response) => {
   FoodsController.index(request, response)
   //eval(pry.it)
+})
+
+app.get('/api/v1/meals/:id', (request, response) => {
+  // eval(pry.it)
+  MealsController.show(request, response)
+})
+
+app.get('/api/v1/meals', (request, response) => {
+  MealsController.index(request, response)
 })
 
 

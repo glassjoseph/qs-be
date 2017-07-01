@@ -21,36 +21,13 @@ describe("Server", () => {
     assert(app)
   })
 
-//THESE GET THERE OWJN TEST FILE
-//   describe("GET /", () => {
-//     it("should return a 200", (done) => {
-//       this.request.get("/", (error, response) => {
-//         if(error){ done(error) }
-//         assert.equal(response.statusCode, 200)
-//         done()
-//       })
-//     })
-//   })
-//
-//   describe("GET /api/v1/foods", () => {
-//     it("should return all food objects", (done) => {
-//       this.request.get("/api/v1/foods", (error, response) => {
-//         if(error){ done(error)}
-//         assert.equal(response.statusCode, 200)
-//         done()
-//       })
-//     })
-//   })
-//
-//   describe("GET /api/v1/meals", () => {
-//     it("should return all meal objects", (done) => {
-//       this.request.get("/api/v1/meals", (error, response) => {
-//         if(error){ done(error)}
-//         assert.equal(response.statusCode, 200)
-//         assert.include(response.body, "lunch"))
-//         done()
-//       })
-//     })
-//   })
-//
-// })
+  describe("GET /", () => {
+    it("should return a 200", (done) => {
+      this.request.get("/", (error, response) => {
+        if(error){ done(error) }
+        assert.equal(response.statusCode, 200)
+        done()
+      })
+    })
+  })
+})
