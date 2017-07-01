@@ -42,17 +42,35 @@ if(!module.parent){
 
 app.get('/api/v1/foods', (request, response) => {
   FoodsController.index(request, response)
-  //eval(pry.it)
+})
+
+app.post('/api/v1/foods', (request, response) => {
+  FoodsController.create(request, response)
+})
+
+app.put('/api/v1/foods/:id', (request, response) => {
+  FoodsController.update(request, response)
+})
+
+
+app.get('/api/v1/foods/:id', (request, response) => {
+  FoodsController.show(request, response)
+})
+
+app.delete('/api/v1/foods/:id', (request, response) => {
+
+  FoodsController.delete(request, response)
+})
+
+
+
+app.get('/api/v1/meals', (request, response) => {
+  MealsController.index(request, response)
 })
 
 app.get('/api/v1/meals/:id', (request, response) => {
   // eval(pry.it)
   MealsController.show(request, response)
 })
-
-app.get('/api/v1/meals', (request, response) => {
-  MealsController.index(request, response)
-})
-
 
 module.exports = app
