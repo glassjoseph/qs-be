@@ -40,22 +40,19 @@ if(!module.parent){
 
 //NEW
 
-app.get('/api/v1/foods', (request, response) => {
-  FoodsController.index(request, response)
-})
+app.get('/api/v1/foods', FoodsController.index)
+app.get('/api/v1/foods/:id', FoodsController.show)
+app.post('/api/v1/foods', FoodsController.create)
 
-app.post('/api/v1/foods', (request, response) => {
-  FoodsController.create(request, response)
-})
+// app.post('/api/v1/foods', (request, response) => {
+//   FoodsController.create(request, response)
+// })
 
 app.put('/api/v1/foods/:id', (request, response) => {
   FoodsController.update(request, response)
 })
 
 
-app.get('/api/v1/foods/:id', (request, response) => {
-  FoodsController.show(request, response)
-})
 
 app.delete('/api/v1/foods/:id', (request, response) => {
 
