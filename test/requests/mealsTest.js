@@ -12,13 +12,31 @@ describe("Meal Endpoint", function() {
     this.port = 9001
 
     this.server = app.listen(this.port, function(error, result) {
-      if(error) {return done(err) }
+      if(error) {return done(error) }
       done()
     })
 
     this.request = request.defaults(
       {baseUrl: 'http://localhost:9001'}
     )
+  })
+
+  beforeEach(function(done){
+    database.raw("INSERT INTO meals (name, created_at) VALUES ('Breakfast', '01-01-2012')")
+      .then( () => {
+      database.raw("INSERT INTO meals (name, created_at) VALUES ('Dinner', '01-01-2012')")
+      .then( () => {
+          done()
+      })
+    })
+  })
+
+
+  afterEach(function(done) {
+    database.raw('TRUNCATE meals RESTART IDENTITY CASCADE')
+    .then(() => {
+      done()
+    })
   })
 
   after(function(done) {
@@ -32,7 +50,7 @@ describe("Meal Endpoint", function() {
       const parsed = JSON.parse(response.body)
 
       assert.equal(response.statusCode, 200)
-      assert.equal(parsed.length, 4)
+      assert.equal(parsed.length, 3)
       done()
     })
   })
@@ -48,8 +66,6 @@ describe("Meal Endpoint", function() {
     })
   })
 
-
-  ///HERE
   it("GET an id that doesn't exist", function(done) {
     this.request.get('/api/v1/meals/9001', function(error, response) {
       assert.equal(response.statusCode, 404)

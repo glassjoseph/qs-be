@@ -7,7 +7,7 @@ const configuration  = require('../../knexfile')[environment]
 const database       = require('knex')(configuration)
 
 describe("Food Endpoint", function() {
-  this.timeout(100000)
+  this.timeout(10000)
   before(function(done) {
     this.port = 9001
 
@@ -19,6 +19,28 @@ describe("Food Endpoint", function() {
     this.request = request.defaults(
       {baseUrl: 'http://localhost:9001'}
     )
+  })
+  beforeEach(function(done) {
+    database.raw("INSERT INTO foods (name, calories) VALUES ('calzone', 250)")
+    .then( () => {
+      database.raw("INSERT INTO foods (name, calories) VALUES ('edemmame', 150)")
+      .then(() => {
+        database.raw("INSERT INTO foods (name, calories) VALUES ('milk', 50)")
+        .then(() => {
+          database.raw("INSERT INTO foods (name, calories) VALUES ('pizza', 950)")
+          .then(() => {
+            done()
+          })
+        })
+      })
+    })
+  })
+
+  afterEach(function(done) {
+    database.raw('TRUNCATE foods RESTART IDENTITY CASCADE')
+    .then(() => {
+      done()
+    })
   })
 
   after(function(done) {
@@ -32,7 +54,7 @@ describe("Food Endpoint", function() {
       const parsed = JSON.parse(response.body)
 
       assert.equal(response.statusCode, 200)
-      assert.equal(parsed.length, 4)
+      assert.equal(parsed.length, 5)
       done()
     })
   })
@@ -69,14 +91,14 @@ describe("Food Endpoint", function() {
   })
 
   it("PUT /api/v1/foods/:id", function(done) {
-    this.request.put('/api/v1/foods/5?name=Tuna Sandwhich&calories=80', function(error, response) {
+    this.request.put('/api/v1/foods/4?name=Tuna Sandwhich&calories=80', function(error, response) {
       if(error) {done(error)}
       const parsed = JSON.parse(response.body)
 
       assert.equal(response.statusCode, 200)
       assert.equal(parsed[0].name, "Tuna Sandwhich")
       assert.equal(parsed[0].calories, 80)
-      assert.equal(parsed[0].id, 5)
+      assert.equal(parsed[0].id, 4)
       done()
     })
   })
@@ -89,7 +111,7 @@ describe("Food Endpoint", function() {
   })
 
   it("DELETE /api/v1/foods/:id", function(done) {
-    this.request.delete('/api/v1/foods/5', function(error, response) {
+    this.request.delete('/api/v1/foods/3', function(error, response) {
       if(error) {done(error)}
       assert.equal(response.statusCode, 204)
       assert.equal(response.body.length, 0)

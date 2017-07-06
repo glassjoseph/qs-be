@@ -7,55 +7,72 @@ const configuration  = require('../../knexfile')[environment]
 const database       = require('knex')(configuration)
 
 describe("Meal Log Endpoint", function() {
-  this.timeout(100000)
+  this.timeout(10000)
   before(function(done) {
     this.port = 9001
 
     this.server = app.listen(this.port, function(error, result) {
       if(error) {return done(err) }
-      done()
     })
 
     this.request = request.defaults(
       {baseUrl: 'http://localhost:9001'}
     )
+
+    database.raw("INSERT INTO foods (name, calories) VALUES ('calzone', 250)")
+    .then( () => {
+      database.raw("INSERT INTO meals (name, created_at) VALUES ('Breakfast', '01-01-2012')")
+      .then(() => {
+        database.raw("INSERT INTO meal_logs (meal_id, food_id, created_at) VALUES (1, 1, '01-02-2017')")
+        .then(() => {
+          database.raw("INSERT INTO meal_logs (meal_id, food_id, created_at) VALUES (1, 1, '12-02-2017')")
+          .then(() => {
+            done()
+          })
+        })
+      })
+    })
   })
+
 
   after(function(done) {
     this.server.close()
-    done()
+    database.raw('TRUNCATE meal_logs RESTART IDENTITY CASCADE')
+    .then(() => {
+      done()
+    })
   })
 
-  // it("GET /api/v1/meal_logs", function(done) {
-  //   this.request.get('/api/v1/meal_logs', function(error, response) {
-  //     if(error) {done(error)}
-  //     const parsed = JSON.parse(response.body)
-  //
-  //     assert.equal(response.statusCode, 200)
-  //     assert.equal(parsed.length, 4)
-  //     done()
-  //   })
-  // })
-  //
-  // it("GET /api/v1/meal_logs/:id", function(done) {
-  //   this.request.get('/api/v1/meal_logs/1', function(error, response) {
-  //     if(error) {done(error)}
-  //     const parsed = JSON.parse(response.body)
-  //
-  //     assert.equal(response.statusCode, 200)
-  //     assert.equal(parsed.length, 1)
-  //     done()
-  //   })
-  // })
-  //
-  // it("GET an id that doesn't exist", function(done) {
-  //   this.request.get('/api/v1/meal_logs/9001', function(error, response) {
-  //     assert.equal(response.statusCode, 404)
-  //     done()
-  //   })
-  // })
-  //
-  //
+  it("GET /api/v1/meal_logs", function(done) {
+    this.request.get('/api/v1/meal_logs', function(error, response) {
+      if(error) {done(error)}
+      const parsed = JSON.parse(response.body)
+
+      assert.equal(response.statusCode, 200)
+      assert.equal(parsed.length, 2)
+      done()
+    })
+  })
+
+  it("GET /api/v1/meal_logs/:id", function(done) {
+    this.request.get('/api/v1/meal_logs/1', function(error, response) {
+      if(error) {done(error)}
+      const parsed = JSON.parse(response.body)
+
+      assert.equal(response.statusCode, 200)
+      assert.equal(parsed.length, 1)
+      done()
+    })
+  })
+
+  it("GET an id that doesn't exist", function(done) {
+    this.request.get('/api/v1/meal_logs/9001', function(error, response) {
+      assert.equal(response.statusCode, 404)
+      done()
+    })
+  })
+
+
   // // weird ==========================================================
   // xit("POST /api/v1/meal_logs", function(done) {
   //   this.request.post('/api/v1/meal_logs?meal_id=1&food_id=1&created_at=06063017', function(error, response) {
