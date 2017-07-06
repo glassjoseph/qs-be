@@ -3,10 +3,13 @@ const app               = express()
 const bodyParser        = require('body-parser')
 const foodsController   = require('./lib/controllers/api/v1/foodsController')
 const mealsController = require('./lib/controllers/api/v1/mealsController')
+const mealLogsController =  require('./lib/controllers/api/v1/mealLogsController')
+
 const cors              = require('cors')
 const pry               = require('pryjs')
 const FoodsController   = new foodsController()
 const MealsController   = new mealsController()
+const MealLogsController   = new mealLogsController()
 
 app.use(cors({origin: "*"}))
 app.use(bodyParser.json())
@@ -33,6 +36,13 @@ app.delete('/api/v1/foods/:id', FoodsController.delete)
 
 app.get('/api/v1/meals', MealsController.index)
 app.get('/api/v1/meals/:id', MealsController.show)
+
+
+app.get('/api/v1/meal_logs', MealLogsController.index)
+app.get('/api/v1/meal_logs/:id', MealLogsController.show)
+app.post('/api/v1/meal_logs', MealLogsController.create)
+app.put('/api/v1/meal_logs/:id', MealLogsController.update)
+app.delete('/api/v1/meal_logs/:id', MealLogsController.delete)
 
 if(!module.parent){
   app.listen(app.get('port'), () => {
