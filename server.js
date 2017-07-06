@@ -3,10 +3,13 @@ const app               = express()
 const bodyParser        = require('body-parser')
 const foodsController   = require('./lib/controllers/api/v1/foodsController')
 const mealsController = require('./lib/controllers/api/v1/mealsController')
+const mealLogsController =  require('./lib/controllers/api/v1/mealLogsController')
+
 const cors              = require('cors')
 const pry               = require('pryjs')
 const FoodsController   = new foodsController()
 const MealsController   = new mealsController()
+const MealLogsController   = new mealLogsController()
 
 app.use(cors({origin: "*"}))
 app.use(bodyParser.json())
@@ -52,13 +55,11 @@ app.put('/api/v1/foods/:id', (request, response) => {
   FoodsController.update(request, response)
 })
 
-
 app.get('/api/v1/foods/:id', (request, response) => {
   FoodsController.show(request, response)
 })
 
 app.delete('/api/v1/foods/:id', (request, response) => {
-
   FoodsController.delete(request, response)
 })
 
@@ -72,5 +73,27 @@ app.get('/api/v1/meals/:id', (request, response) => {
   // eval(pry.it)
   MealsController.show(request, response)
 })
+
+
+app.get('/api/v1/meal_logs', (request, response) => {
+  MealLogsController.index(request, response)
+})
+
+app.get('/api/v1/meal_logs/:id', (request, response) => {
+  MealLogsController.show(request, response)
+})
+
+app.post('/api/v1/meal_logs', (request, response) => {
+  MealLogsController.create(request, response)
+})
+
+app.delete('/api/v1/meal_logs/:id', (request, response) => {
+  MealLogsController.delete(request, response)
+})
+
+app.put('/api/v1/meal_logs/:id', (request, response) => {
+  MealLogsController.update(request, response)
+})
+
 
 module.exports = app
