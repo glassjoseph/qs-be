@@ -7,7 +7,7 @@ const configuration  = require('../../knexfile')[environment]
 const database       = require('knex')(configuration)
 
 describe("Meal Endpoint", function() {
-  this.timeout(100000)
+  this.timeout(10000000)
   before(function(done) {
     this.port = 9001
 
@@ -22,20 +22,21 @@ describe("Meal Endpoint", function() {
   })
 
   beforeEach(function(done){
-    database.raw("INSERT INTO meals (name, created_at) VALUES ('Breakfast', '01-01-2012')")
-      .then( () => {
-      database.raw("INSERT INTO meals (name, created_at) VALUES ('Dinner', '01-01-2012')")
-      .then( () => {
-          done()
-      })
-    })
-  })
-
-
-  afterEach(function(done) {
     database.raw('TRUNCATE meals RESTART IDENTITY CASCADE')
     .then(() => {
-      done()
+      database.raw("INSERT INTO meals (name, created_at) VALUES ('Breakfast', '01-01-2012')")
+        .then( () => {
+        database.raw("INSERT INTO meals (name, created_at) VALUES ('Lunch', '01-01-2012')")
+        .then( () => {
+          database.raw("INSERT INTO meals (name, created_at) VALUES ('Dinner', '01-01-2012')")
+            .then( () => {
+            database.raw("INSERT INTO meals (name, created_at) VALUES ('Snack', '01-01-2012')")
+            .then( () => {
+              done()
+            })
+          })
+        })
+      })
     })
   })
 
@@ -45,12 +46,12 @@ describe("Meal Endpoint", function() {
   })
 
   it("GET /api/v1/meals", function(done) {
+
     this.request.get('/api/v1/meals', function(error, response) {
       if(error) {done(error)}
       const parsed = JSON.parse(response.body)
-
       assert.equal(response.statusCode, 200)
-      assert.equal(parsed.length, 3)
+      assert.equal(parsed.length, 4)
       done()
     })
   })
