@@ -7,7 +7,7 @@ const configuration  = require('../../knexfile')[environment]
 const database       = require('knex')(configuration)
 
 describe("Meal Log Endpoint", function() {
-  this.timeout(10000)
+  this.timeout(1000000)
   before(function(done) {
     this.port = 9001
 
@@ -19,34 +19,37 @@ describe("Meal Log Endpoint", function() {
       {baseUrl: 'http://localhost:9001'}
     )
 
-    database.raw("INSERT INTO foods (name, calories) VALUES ('calzone', 250)")
+    database.raw('TRUNCATE meal_logs, foods, meals RESTART IDENTITY CASCADE')
     .then( () => {
-      database.raw("INSERT INTO meals (name, created_at) VALUES ('Breakfast', '01-01-2012')")
-      .then(() => {
-        database.raw("INSERT INTO meal_logs (meal_id, food_id, created_at) VALUES (1, 1, '01-02-2017')")
+      database.raw("INSERT INTO foods (name, calories) VALUES ('calzone', 250)")
+      .then( () => {
+        database.raw("INSERT INTO meals (name, created_at) VALUES ('Breakfast', '01-01-2012')")
         .then(() => {
-          database.raw("INSERT INTO meal_logs (meal_id, food_id, created_at) VALUES (1, 1, '12-02-2017')")
-          .then(() => {
-            done()
+          database.raw("INSERT INTO foods (name, calories) VALUES ('Grilled Cheese', 250)")
+          .then( () => {
+            database.raw("INSERT INTO meals (name, created_at) VALUES ('Lunch', '01-01-2012')")
+            .then(() => {
+              database.raw("INSERT INTO meal_logs (meal_id, food_id, created_at) VALUES (1, 1, '01-02-2017')")
+              .then(() => {
+                database.raw("INSERT INTO meal_logs (meal_id, food_id, created_at) VALUES (1, 2, '12-02-2017')")
+                .then(() => {
+                  done()
+                })
+              })
+            })
           })
         })
       })
     })
   })
 
-
-  after(function(done) {
+  after(function() {
     this.server.close()
-    database.raw('TRUNCATE meal_logs RESTART IDENTITY CASCADE')
-    .then(() => {
-      done()
-    })
   })
 
   it("GET /api/v1/meal_logs", function(done) {
     this.request.get('/api/v1/meal_logs', function(error, response) {
       if(error) {done(error)}
-      //eval(pry.it)
       const parsed = JSON.parse(response.body)
 
       assert.equal(response.statusCode, 200)
@@ -73,42 +76,36 @@ describe("Meal Log Endpoint", function() {
     })
   })
 
-
-  // // weird ==========================================================
-  xit("POST /api/v1/meal_logs", function(done) {
-    this.request.post('/api/v1/meal_logs?meal_id=10&food_id=10&created_at=06063017', function(error, response) {
+  it("POST /api/v1/meal_logs", function(done) {
+    this.request.post('/api/v1/meal_logs?meal_id=1&food_id=1&created_at=06063017', function(error, response) {
       if(error) {done(error)}
-      eval(pry)
       const parsed = JSON.parse(response.body)
       assert.equal(response.statusCode, 200)
-      assert.equal(parsed[0].name, "Chocolate")
-      assert.equal(parsed[0].calories, 100)
-      assert.equal(parsed[0].id, 5)
+      assert.equal(parsed[0].meal_id, 1)
+      assert.equal(parsed[0].food_id, 1)
+      assert.equal(parsed[0].id, 3)
       done()
     })
   })
 
   it("PUT /api/v1/meal_logs/:id", function(done) {
-    this.request.put('/api/v1/meal_logs/1?food_id=9001&meal_id=9001', function(error, response) {
+    this.request.put('/api/v1/meal_logs/1?food_id=2&meal_id=2', function(error, response) {
       if(error) {done(error)}
-      eval(pry.it)
       const parsed = JSON.parse(response.body)
-
       assert.equal(response.statusCode, 200)
-      assert.equal(parsed[0].name, "Tuna Sandwhich")
-      assert.equal(parsed[0].calories, 80)
-      assert.equal(parsed[0].id, 5)
+      assert.equal(parsed[0].meal_id, 2)
+      assert.equal(parsed[0].food_id, 2)
+      assert.equal(parsed[0].id, 1)
       done()
     })
   })
 
-  xit("PUT for an id that doens't exist", function(done) {
-    this.request.put('/api/v1/meal_logs/9001?name=pleeb&calories=330', function(error, response) {
+  it("PUT for an id that doesn't exist", function(done) {
+    this.request.put('/api/v1/meal_logs/9001?meal_id=1&food_id=3', function(error, response) {
       assert.equal(response.statusCode, 404)
       done()
     })
   })
-  // // weird ==========================================================
 
   it("DELETE /api/v1/meal_logs/:id", function(done) {
     this.request.delete('/api/v1/meal_logs/1', function(error, response) {
@@ -125,4 +122,7 @@ describe("Meal Log Endpoint", function() {
     done()
     })
   })
+
+
+
 })
