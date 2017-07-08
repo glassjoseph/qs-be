@@ -2,7 +2,7 @@ const pry            = require('pryjs')
 const assert         = require("chai").assert
 const app            = require('../../server')
 const request        = require('request')
-const environment    = process.env.NODE_ENV || 'development'
+const environment    = process.env.NODE_ENV || 'test'
 const configuration  = require('../../knexfile')[environment]
 const database       = require('knex')(configuration)
 
@@ -20,6 +20,25 @@ describe("Food Endpoint", function() {
       {baseUrl: 'http://localhost:9001'}
     )
   })
+  beforeEach(function(done) {
+    database.raw('TRUNCATE foods RESTART IDENTITY CASCADE')
+    .then(() => {
+    database.raw("INSERT INTO foods (name, calories) VALUES ('calzone', 250)")
+    .then( () => {
+      database.raw("INSERT INTO foods (name, calories) VALUES ('edemmame', 150)")
+      .then(() => {
+        database.raw("INSERT INTO foods (name, calories) VALUES ('milk', 50)")
+        .then(() => {
+          database.raw("INSERT INTO foods (name, calories) VALUES ('pizza', 950)")
+          .then(() => {
+            done()
+          })
+        })
+      })
+    })
+  })
+})
+
 
   after(function(done) {
     this.server.close()
@@ -69,19 +88,18 @@ describe("Food Endpoint", function() {
   })
 
   it("PUT /api/v1/foods/:id", function(done) {
-    this.request.put('/api/v1/foods/5?name=Tuna Sandwhich&calories=80', function(error, response) {
+    this.request.put('/api/v1/foods/4?name=Tuna Sandwich&calories=80', function(error, response) {
       if(error) {done(error)}
       const parsed = JSON.parse(response.body)
-
       assert.equal(response.statusCode, 200)
-      assert.equal(parsed[0].name, "Tuna Sandwhich")
+      assert.equal(parsed[0].name, "Tuna Sandwich")
       assert.equal(parsed[0].calories, 80)
-      assert.equal(parsed[0].id, 5)
+      assert.equal(parsed[0].id, 4)
       done()
     })
   })
 
-  it("PUT for an id that doens't exist", function(done) {
+  it("PUT for an id that doesn't exist", function(done) {
     this.request.put('/api/v1/foods/9001?name=pleeb&calories=330', function(error, response) {
       assert.equal(response.statusCode, 404)
       done()
@@ -89,7 +107,7 @@ describe("Food Endpoint", function() {
   })
 
   it("DELETE /api/v1/foods/:id", function(done) {
-    this.request.delete('/api/v1/foods/5', function(error, response) {
+    this.request.delete('/api/v1/foods/3', function(error, response) {
       if(error) {done(error)}
       assert.equal(response.statusCode, 204)
       assert.equal(response.body.length, 0)
