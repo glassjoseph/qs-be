@@ -7,7 +7,7 @@ const configuration  = require('../../knexfile')[environment]
 const database       = require('knex')(configuration)
 
 describe("Food Endpoint", function() {
-  this.timeout(10000)
+  this.timeout(100000)
   before(function(done) {
     this.port = 9001
 
@@ -21,6 +21,8 @@ describe("Food Endpoint", function() {
     )
   })
   beforeEach(function(done) {
+    database.raw('TRUNCATE foods RESTART IDENTITY CASCADE')
+    .then(() => {
     database.raw("INSERT INTO foods (name, calories) VALUES ('calzone', 250)")
     .then( () => {
       database.raw("INSERT INTO foods (name, calories) VALUES ('edemmame', 150)")
@@ -35,13 +37,8 @@ describe("Food Endpoint", function() {
       })
     })
   })
+})
 
-  afterEach(function(done) {
-    database.raw('TRUNCATE foods RESTART IDENTITY CASCADE')
-    .then(() => {
-      done()
-    })
-  })
 
   after(function(done) {
     this.server.close()
@@ -54,7 +51,7 @@ describe("Food Endpoint", function() {
       const parsed = JSON.parse(response.body)
 
       assert.equal(response.statusCode, 200)
-      assert.equal(parsed.length, 5)
+      assert.equal(parsed.length, 4)
       done()
     })
   })
@@ -91,19 +88,18 @@ describe("Food Endpoint", function() {
   })
 
   it("PUT /api/v1/foods/:id", function(done) {
-    this.request.put('/api/v1/foods/4?name=Tuna Sandwhich&calories=80', function(error, response) {
+    this.request.put('/api/v1/foods/4?name=Tuna Sandwich&calories=80', function(error, response) {
       if(error) {done(error)}
       const parsed = JSON.parse(response.body)
-
       assert.equal(response.statusCode, 200)
-      assert.equal(parsed[0].name, "Tuna Sandwhich")
+      assert.equal(parsed[0].name, "Tuna Sandwich")
       assert.equal(parsed[0].calories, 80)
       assert.equal(parsed[0].id, 4)
       done()
     })
   })
 
-  it("PUT for an id that doens't exist", function(done) {
+  it("PUT for an id that doesn't exist", function(done) {
     this.request.put('/api/v1/foods/9001?name=pleeb&calories=330', function(error, response) {
       assert.equal(response.statusCode, 404)
       done()
