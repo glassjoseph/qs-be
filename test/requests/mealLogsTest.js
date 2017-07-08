@@ -23,15 +23,15 @@ describe("Meal Log Endpoint", function() {
     .then( () => {
       database.raw("INSERT INTO foods (name, calories) VALUES ('calzone', 250)")
       .then( () => {
-        database.raw("INSERT INTO meals (name, created_at) VALUES ('Breakfast', '01-01-2012')")
+        database.raw("INSERT INTO meals (name) VALUES ('Breakfast')")
         .then(() => {
           database.raw("INSERT INTO foods (name, calories) VALUES ('Grilled Cheese', 250)")
           .then( () => {
-            database.raw("INSERT INTO meals (name, created_at) VALUES ('Lunch', '01-01-2012')")
+            database.raw("INSERT INTO meals (name) VALUES ('Lunch')")
             .then(() => {
-              database.raw("INSERT INTO meal_logs (meal_id, food_id, created_at) VALUES (1, 1, '01-02-2017')")
+              database.raw("INSERT INTO meal_logs (meal_id, food_id) VALUES (1, 1)")
               .then(() => {
-                database.raw("INSERT INTO meal_logs (meal_id, food_id, created_at) VALUES (1, 2, '12-02-2017')")
+                database.raw("INSERT INTO meal_logs (meal_id, food_id) VALUES (1, 2)")
                 .then(() => {
                   done()
                 })
@@ -77,7 +77,7 @@ describe("Meal Log Endpoint", function() {
   })
 
   it("POST /api/v1/meal_logs", function(done) {
-    this.request.post('/api/v1/meal_logs?meal_id=1&food_id=1&created_at=06063017', function(error, response) {
+    this.request.post('/api/v1/meal_logs?meal_id=1&food_id=1', function(error, response) {
       if(error) {done(error)}
       const parsed = JSON.parse(response.body)
       assert.equal(response.statusCode, 200)

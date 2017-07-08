@@ -1,10 +1,11 @@
 
 exports.up = function(knex, Promise) {
-  let createQuery = `CREATE TABLE foods(
+  let createQuery = `
+  CREATE TABLE foods(
     id SERIAL PRIMARY KEY NOT NULL,
     name TEXT,
     calories INTEGER,
-    created_at TIMESTAMP
+    food_status status default 'active'
   )`;
   return knex.raw(createQuery)
 };

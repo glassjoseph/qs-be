@@ -11,12 +11,12 @@ const database       = require('knex')(configuration)
 // describe("Meal", () => {
 //   before((done) => {
 //     database.raw(
-//       'INSERT INTO meals (name, created_at) VALUES (?, ?)',
-//       ["Breakfast", new Date]
+//       'INSERT INTO meals (name) VALUES (?)',
+//       ["Breakfast"]
 //     ),
 //     database.raw(
-//       'INSERT INTO meals (name, created_at) VALUES (?, ?)',
-//       ["Lunch", new Date]
+//       'INSERT INTO meals (name) VALUES (?)',
+//       ["Lunch"]
 //     )
 //     .then(() => { done()})
 //   })
@@ -32,6 +32,6 @@ const database       = require('knex')(configuration)
 //     // eval(pry.it)
 //     assert.equal(meals.length, 2)
 //   })
-// 
+//
 //
 // })
