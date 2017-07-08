@@ -2,7 +2,7 @@ const pry            = require('pryjs')
 const assert         = require("chai").assert
 const app            = require('../../server')
 const request        = require('request')
-const environment    = process.env.NODE_ENV || 'development'
+const environment    = process.env.NODE_ENV || 'test'
 const configuration  = require('../../knexfile')[environment]
 const database       = require('knex')(configuration)
 
