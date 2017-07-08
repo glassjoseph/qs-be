@@ -24,13 +24,13 @@ describe("Meal Endpoint", function() {
   beforeEach(function(done){
     database.raw('TRUNCATE meals RESTART IDENTITY CASCADE')
     .then(() => {
-      database.raw("INSERT INTO meals (name, created_at) VALUES ('Breakfast', '01-01-2012')")
+      database.raw("INSERT INTO meals (name) VALUES ('Breakfast')")
         .then( () => {
-        database.raw("INSERT INTO meals (name, created_at) VALUES ('Lunch', '01-01-2012')")
+        database.raw("INSERT INTO meals (name) VALUES ('Lunch')")
         .then( () => {
-          database.raw("INSERT INTO meals (name, created_at) VALUES ('Dinner', '01-01-2012')")
+          database.raw("INSERT INTO meals (name) VALUES ('Dinner')")
             .then( () => {
-            database.raw("INSERT INTO meals (name, created_at) VALUES ('Snack', '01-01-2012')")
+            database.raw("INSERT INTO meals (name) VALUES ('Snack')")
             .then( () => {
               done()
             })

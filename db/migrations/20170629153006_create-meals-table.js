@@ -2,8 +2,7 @@
 exports.up = function(knex, Promise) {
   let createQuery = `CREATE TABLE meals(
     id SERIAL PRIMARY KEY NOT NULL,
-    name TEXT,
-    created_at TIMESTAMP
+    name TEXT
   )`;
   return knex.raw(createQuery)
 };
