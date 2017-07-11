@@ -29,10 +29,10 @@ app.get('/', (request, response) => {
 //NEW
 
 app.get('/api/v1/foods', FoodsController.index)
-app.get('/api/v1/foods/:id', FoodsController.show)
+app.get('/api/v1/foods/:name', FoodsController.show)
 app.post('/api/v1/foods', FoodsController.create)
 app.put('/api/v1/foods/:id', FoodsController.update)
-app.delete('/api/v1/foods/:id', FoodsController.delete)
+app.delete('/api/v1/foods/:name', FoodsController.delete)
 
 app.get('/api/v1/meals', MealsController.index)
 app.get('/api/v1/meals/:id', MealsController.show)
