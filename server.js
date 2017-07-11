@@ -20,13 +20,10 @@ app.set('port', process.env.PORT || 3000)
 app.locals.title = "Quantified Self BE"
 
 
-//ORIGINAL
-// not useful for an api
 app.get('/', (request, response) => {
   response.send("Welcome to our app!")
 })
 
-//NEW
 
 app.get('/api/v1/foods', FoodsController.index)
 app.get('/api/v1/foods/:name', FoodsController.show)
