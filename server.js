@@ -32,7 +32,7 @@ app.put('/api/v1/foods/:id', FoodsController.update)
 app.delete('/api/v1/foods/:name', FoodsController.delete)
 
 app.get('/api/v1/meals', MealsController.index)
-app.get('/api/v1/meals/:id', MealsController.show)
+app.get('/api/v1/meals/:name', MealsController.show)
 
 
 app.get('/api/v1/meal_logs', MealLogsController.index)
