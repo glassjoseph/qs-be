@@ -8,7 +8,7 @@
     "start": "nodemon server.js",
     "debug": "NODE_ENV=test mocha debug test/*-test.js",
     "m": "knex migrate: latest",
-    "s" : "knex seed: run",
+    "s": "knex seed: run",
     "st": "knex seed: run --env test"
   },
   "repository": {
@@ -33,6 +33,7 @@
     "chai": "^4.0.2",
     "mocha": "^3.4.2",
     "nodemon": "^1.11.0",
+    "pryjs": "^1.0.3",
     "request": "^2.81.0"
   }
 }
