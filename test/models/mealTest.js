@@ -1,4 +1,3 @@
-const pry = require('pryjs')
 const meal = require ('../../lib/models/meal')
 const assert = require("chai").assert
 const Meal = new meal()
@@ -29,7 +28,6 @@ const database       = require('knex')(configuration)
 //
 //   it("all() returns all meals", () => {
 //     const all_meals = Meal.all
-//     // eval(pry.it)
 //     assert.equal(meals.length, 2)
 //   })
 //
