@@ -39,7 +39,7 @@ app.get('/api/v1/meal_logs', MealLogsController.index)
 app.get('/api/v1/meal_logs/:id', MealLogsController.show)
 app.post('/api/v1/meal_logs', MealLogsController.create)
 app.put('/api/v1/meal_logs/:id', MealLogsController.update)
-app.delete('/api/v1/meal_logs/:id', MealLogsController.delete)
+app.delete('/api/v1/meal_logs/', MealLogsController.delete)
 
 if(!module.parent){
   app.listen(app.get('port'), () => {
