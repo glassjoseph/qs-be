@@ -6,7 +6,6 @@ const mealsController = require('./lib/controllers/api/v1/mealsController')
 const mealLogsController =  require('./lib/controllers/api/v1/mealLogsController')
 
 const cors              = require('cors')
-const pry               = require('pryjs')
 const FoodsController   = new foodsController()
 const MealsController   = new mealsController()
 const MealLogsController   = new mealLogsController()

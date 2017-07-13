@@ -1,4 +1,3 @@
-const pry = require('pryjs')
 const food = require ('../../lib/models/food')
 const assert = require("chai").assert
 const Food = new food()

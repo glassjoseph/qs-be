@@ -1,4 +1,3 @@
-const pry            = require('pryjs')
 const assert         = require("chai").assert
 const app            = require('../../server')
 const request        = require('request')
