@@ -32,7 +32,6 @@ module.exports = {
     migrations: {
       directory: './db/migrations'
     },
-    ssl: true,
     seeds: {
       directory: './db/seeds/production'
     },
