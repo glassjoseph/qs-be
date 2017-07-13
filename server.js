@@ -42,9 +42,12 @@ app.put('/api/v1/meal_logs/:id', MealLogsController.update)
 app.delete('/api/v1/meal_logs/', MealLogsController.delete)
 
 if(!module.parent){
-  app.listen(app.get('port'), () => {
-    console.log(`${app.locals.title} is running on ${app.get('port')}`)
-  })
+  // app.listen(app.get('port'), () => {
+  //   console.log(`${app.locals.title} is running on ${app.get('port')}`)
+  // })
+    app.listen(process.env.PORT || 3000, function(){
+    console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
+  });
 }
 
 module.exports = app
